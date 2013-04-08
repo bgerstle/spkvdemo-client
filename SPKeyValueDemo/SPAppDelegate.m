@@ -9,11 +9,13 @@
 #import "SPAppDelegate.h"
 #import <MDWamp/MDWamp.h>
 #import "SPPuppyTableViewController.h"
+#import "SPPromise.h"
 
 @interface SPAppDelegate ()
 <MDWampDelegate>
 {
     MDWamp* _wampSocket;
+    SPDeferred* _wampDeferred;
 }
 
 @end
@@ -22,7 +24,27 @@
 
 #pragma mark - MDWampDelegate
 
+- (void)onOpen
+{
+    static NSDictionary* prefixesURIMap = nil;
+    if (!prefixesURIMap){
+        prefixesURIMap = @{@"pups": @"http://spkvexample.com/pups/"};
+    }
+    
+    [prefixesURIMap enumerateKeysAndObjectsUsingBlock:^(NSString* prefix, NSString* uri, BOOL *stop) {
+        [_wampSocket prefix:prefix uri:uri];
+    }];
+    
+    [_wampDeferred resolveWith:_wampSocket];
+}
 
+- (void)onClose:(int)code reason:(NSString *)reason
+{
+    [_wampDeferred reject:[NSError errorWithDomain:@"MDWampErrorDomain"
+                                              code:code
+                                          userInfo:@{NSLocalizedFailureReasonErrorKey: reason}]];
+    _wampDeferred = nil;
+}
 
 #pragma mark - UIApplicationDelegate
 
@@ -30,7 +52,9 @@
 {
     [MDWamp setDebug:YES];
     
-    _wampSocket = [[MDWamp alloc] initWithUrl:[NSURL URLWithString:@"ws://localhost:9000"] delegate:self];
+    _wampDeferred = [[SPDeferred alloc] init];
+    
+    _wampSocket = [[MDWamp alloc] initWithUrl:@"ws://localhost:9000" delegate:self];
     
     [_wampSocket connect];
     
@@ -38,7 +62,7 @@
     // Override point for customization after application launch.
     self.viewController = [[SPPuppyTableViewController alloc] initWithStyle:UITableViewStylePlain];
     
-    _viewController.wampSocket = _wampSocket;
+    [self.viewController setSocketOpenPromise:_wampDeferred.promise];
     
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
