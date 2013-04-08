@@ -35,7 +35,6 @@
 		BC934C801712F89000835B9B /* SPLifetimeGlue.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934C6F1712F89000835B9B /* SPLifetimeGlue.m */; };
 		BC934C811712F89000835B9B /* SPLowVerbosity.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934C711712F89000835B9B /* SPLowVerbosity.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BC934C821712F89000835B9B /* SPLowVerbosity.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934C711712F89000835B9B /* SPLowVerbosity.m */; };
-		BC934C9617130B9900835B9B /* libSocketRocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC934C8D17130B8300835B9B /* libSocketRocket.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,41 +44,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = BC934C061712F76500835B9B;
 			remoteInfo = SPKeyValueDemo;
-		};
-		BC934C8C17130B8300835B9B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BC934C8517130B8300835B9B /* SocketRocket.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F6B2082D1450F597009315AF;
-			remoteInfo = SocketRocket;
-		};
-		BC934C8E17130B8300835B9B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BC934C8517130B8300835B9B /* SocketRocket.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F668C880153E91210044DBAC;
-			remoteInfo = SocketRocketOSX;
-		};
-		BC934C9017130B8300835B9B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BC934C8517130B8300835B9B /* SocketRocket.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F6BDA802145900D200FE3253;
-			remoteInfo = SRWebSocketTests;
-		};
-		BC934C9217130B8300835B9B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BC934C8517130B8300835B9B /* SocketRocket.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F62417E314D52F3C003CE997;
-			remoteInfo = TestChat;
-		};
-		BC934C9417130B9300835B9B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BC934C8517130B8300835B9B /* SocketRocket.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = F6B2082C1450F597009315AF;
-			remoteInfo = SocketRocket;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -119,7 +83,6 @@
 		BC934C701712F89000835B9B /* SPLowVerbosity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPLowVerbosity.h; sourceTree = "<group>"; };
 		BC934C711712F89000835B9B /* SPLowVerbosity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPLowVerbosity.m; sourceTree = "<group>"; };
 		BC934C741712F89000835B9B /* SPSuccinct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPSuccinct.h; sourceTree = "<group>"; };
-		BC934C8517130B8300835B9B /* SocketRocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SocketRocket.xcodeproj; path = SocketRocket/SocketRocket.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,7 +90,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BC934C9617130B9900835B9B /* libSocketRocket.a in Frameworks */,
 				BC934C0B1712F76500835B9B /* UIKit.framework in Frameworks */,
 				BC934C0D1712F76500835B9B /* Foundation.framework in Frameworks */,
 				BC934C0F1712F76500835B9B /* CoreGraphics.framework in Frameworks */,
@@ -150,7 +112,6 @@
 		BC934BFE1712F76500835B9B = {
 			isa = PBXGroup;
 			children = (
-				BC934C8517130B8300835B9B /* SocketRocket.xcodeproj */,
 				BC934C101712F76500835B9B /* SPKeyValueDemo */,
 				BC934C341712F76500835B9B /* SPKeyValueDemoTests */,
 				BC934C091712F76500835B9B /* Frameworks */,
@@ -246,17 +207,6 @@
 			path = SPSuccinct/SPSuccinct;
 			sourceTree = "<group>";
 		};
-		BC934C8617130B8300835B9B /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				BC934C8D17130B8300835B9B /* libSocketRocket.a */,
-				BC934C8F17130B8300835B9B /* SocketRocket.framework */,
-				BC934C9117130B8300835B9B /* SRWebSocketTests.octest */,
-				BC934C9317130B8300835B9B /* TestChat.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -271,7 +221,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				BC934C9517130B9300835B9B /* PBXTargetDependency */,
 			);
 			name = SPKeyValueDemo;
 			productName = SPKeyValueDemo;
@@ -317,12 +266,6 @@
 			mainGroup = BC934BFE1712F76500835B9B;
 			productRefGroup = BC934C081712F76500835B9B /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = BC934C8617130B8300835B9B /* Products */;
-					ProjectRef = BC934C8517130B8300835B9B /* SocketRocket.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				BC934C061712F76500835B9B /* SPKeyValueDemo */,
@@ -330,37 +273,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		BC934C8D17130B8300835B9B /* libSocketRocket.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libSocketRocket.a;
-			remoteRef = BC934C8C17130B8300835B9B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		BC934C8F17130B8300835B9B /* SocketRocket.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = SocketRocket.framework;
-			remoteRef = BC934C8E17130B8300835B9B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		BC934C9117130B8300835B9B /* SRWebSocketTests.octest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = SRWebSocketTests.octest;
-			remoteRef = BC934C9017130B8300835B9B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		BC934C9317130B8300835B9B /* TestChat.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = TestChat.app;
-			remoteRef = BC934C9217130B8300835B9B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		BC934C051712F76500835B9B /* Resources */ = {
@@ -439,11 +351,6 @@
 			isa = PBXTargetDependency;
 			target = BC934C061712F76500835B9B /* SPKeyValueDemo */;
 			targetProxy = BC934C321712F76500835B9B /* PBXContainerItemProxy */;
-		};
-		BC934C9517130B9300835B9B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = SocketRocket;
-			targetProxy = BC934C9417130B9300835B9B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
