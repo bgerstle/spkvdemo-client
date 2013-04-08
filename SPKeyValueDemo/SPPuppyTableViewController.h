@@ -7,10 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SPPromise.h"
+#import "SPPuppyStorage.h"
 
 @interface SPPuppyTableViewController : UITableViewController
-
-- (void)setSocketOpenPromise:(SPPromise*)wampOpenPromise;
-
+@property (nonatomic, strong) SPPuppyStorage* storage;
 @end

@@ -10,4 +10,11 @@
 
 @implementation SPPuppy
 
++ (SPPuppy*)fromJSON:(NSDictionary *)json
+{
+    SPPuppy* pup = [[SPPuppy alloc] init];
+    [pup setValuesForKeysWithDictionary:json];
+    return pup;
+}
+
 @end

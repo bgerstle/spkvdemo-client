@@ -43,6 +43,9 @@
 		BC934CC01713419200835B9B /* SPDeferredCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CB91713419200835B9B /* SPDeferredCallback.m */; };
 		BC934CC11713419200835B9B /* SPMasterDeferred.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CBB1713419200835B9B /* SPMasterDeferred.m */; };
 		BC934CC21713419200835B9B /* SPPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CBD1713419200835B9B /* SPPromise.m */; };
+		BC934CC61713545800835B9B /* SPPuppyStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CC51713545800835B9B /* SPPuppyStorage.m */; };
+		BC934CC917136D1800835B9B /* NSCollection+Map.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CC817136D1800835B9B /* NSCollection+Map.m */; };
+		BC934CCA17136D1800835B9B /* NSCollection+Map.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CC817136D1800835B9B /* NSCollection+Map.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,6 +110,10 @@
 		BC934CBD1713419200835B9B /* SPPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPPromise.m; sourceTree = "<group>"; };
 		BC934CBE1713419200835B9B /* SPPromise_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPPromise_Internal.h; sourceTree = "<group>"; };
 		BC934CC31713423400835B9B /* SPDeferredBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SPDeferredBase.h; sourceTree = "<group>"; };
+		BC934CC41713545800835B9B /* SPPuppyStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPPuppyStorage.h; sourceTree = "<group>"; };
+		BC934CC51713545800835B9B /* SPPuppyStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPPuppyStorage.m; sourceTree = "<group>"; };
+		BC934CC717136D1800835B9B /* NSCollection+Map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSCollection+Map.h"; sourceTree = "<group>"; };
+		BC934CC817136D1800835B9B /* NSCollection+Map.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSCollection+Map.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +166,8 @@
 		BC934C091712F76500835B9B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BC934CC717136D1800835B9B /* NSCollection+Map.h */,
+				BC934CC817136D1800835B9B /* NSCollection+Map.m */,
 				BC934CB41713419200835B9B /* SPDeferred */,
 				BC934C641712F89000835B9B /* SPSuccinct */,
 				BC934CA61713295E00835B9B /* MDWamp.framework */,
@@ -254,6 +263,8 @@
 			children = (
 				BC934CB017132A7500835B9B /* SPPuppy.h */,
 				BC934CB117132A7500835B9B /* SPPuppy.m */,
+				BC934CC41713545800835B9B /* SPPuppyStorage.h */,
+				BC934CC51713545800835B9B /* SPPuppyStorage.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -407,6 +418,8 @@
 				BC934CC01713419200835B9B /* SPDeferredCallback.m in Sources */,
 				BC934CC11713419200835B9B /* SPMasterDeferred.m in Sources */,
 				BC934CC21713419200835B9B /* SPPromise.m in Sources */,
+				BC934CC61713545800835B9B /* SPPuppyStorage.m in Sources */,
+				BC934CC917136D1800835B9B /* NSCollection+Map.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,6 +434,7 @@
 				BC934C7E1712F89000835B9B /* SPKVONotificationCenter.m in Sources */,
 				BC934C801712F89000835B9B /* SPLifetimeGlue.m in Sources */,
 				BC934C821712F89000835B9B /* SPLowVerbosity.m in Sources */,
+				BC934CCA17136D1800835B9B /* NSCollection+Map.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

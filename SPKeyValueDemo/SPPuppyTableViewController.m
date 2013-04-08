@@ -7,43 +7,24 @@
 //
 
 #import "SPPuppyTableViewController.h"
-#import <MDWamp/MDWamp.h>
+
 #import "SPDepends.h"
 
 @interface SPPuppyTableViewController ()
-<MDWampEventDelegate, MDWampRpcDelegate>
-@property (nonatomic, strong) MDWamp* wampSocket;
+@property (nonatomic, strong) SPDependency* pupBinding;
 @end
 
 @implementation SPPuppyTableViewController
 
-#pragma mark - MDWampProtocols
-
-- (void)onError:(NSString *)errorUri description:(NSString *)errorDesc forCalledUri:(NSString *)callUri
+- (void)setStorage:(SPPuppyStorage *)storage
 {
-    
-}
-
-- (void)onResult:(id)result forCalledUri:(NSString *)callUri
-{
-    
-}
-
-- (void)onEvent:(NSString *)topicUri eventObject:(id)object
-{
-    NSLog(@"Got object %@ for event %@", object, topicUri);
-}
-
-#pragma mark - Accessors
-
-- (void)setSocketOpenPromise:(SPPromise *)wampOpenPromise
-{
-    $sp_decl_wself;
-    [wampOpenPromise done:^(MDWamp* socket) {
-        NSParameterAssert([socket isKindOfClass:[MDWamp class]]);
-        weakSelf.wampSocket = socket;
-        [weakSelf.wampSocket subscribeTopic:@"pups:" withDelegate:self];
-    }];
+    if (![storage isEqual:_storage]) {
+        _storage = storage;
+        
+        $depends(@"puppies", _storage, @"puppies", ^ (NSDictionary* change, id obj, NSString* keypath){
+            [selff.tableView reloadData];
+        });
+    }
 }
 
 #pragma mark - UITableViewController Stuff
@@ -57,11 +38,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_wampSocket unsubscribeTopic:@"pups"];
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -71,6 +47,11 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    $sp_decl_wself;
+    [[_storage getPups] done:^(id obj) {
+        [weakSelf.tableView reloadData];
+    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -83,24 +64,27 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    return [[_storage valueForKeyPath:@"puppies.@count"] intValue];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell.textLabel.textColor = [UIColor blackColor];
+    }
     
     // Configure the cell...
+    cell.textLabel.text = [_storage.puppies[indexPath.row] name];
     
     return cell;
 }

@@ -7,62 +7,28 @@
 //
 
 #import "SPAppDelegate.h"
-#import <MDWamp/MDWamp.h>
 #import "SPPuppyTableViewController.h"
+#import "SPPuppyStorage.h"
 #import "SPPromise.h"
 
 @interface SPAppDelegate ()
-<MDWampDelegate>
-{
-    MDWamp* _wampSocket;
-    SPDeferred* _wampDeferred;
-}
-
 @end
 
 @implementation SPAppDelegate
-
-#pragma mark - MDWampDelegate
-
-- (void)onOpen
 {
-    static NSDictionary* prefixesURIMap = nil;
-    if (!prefixesURIMap){
-        prefixesURIMap = @{@"pups": @"http://spkvexample.com/pups/"};
-    }
-    
-    [prefixesURIMap enumerateKeysAndObjectsUsingBlock:^(NSString* prefix, NSString* uri, BOOL *stop) {
-        [_wampSocket prefix:prefix uri:uri];
-    }];
-    
-    [_wampDeferred resolveWith:_wampSocket];
+    SPPuppyStorage* _storage;
 }
-
-- (void)onClose:(int)code reason:(NSString *)reason
-{
-    [_wampDeferred reject:[NSError errorWithDomain:@"MDWampErrorDomain"
-                                              code:code
-                                          userInfo:@{NSLocalizedFailureReasonErrorKey: reason}]];
-    _wampDeferred = nil;
-}
-
 #pragma mark - UIApplicationDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [MDWamp setDebug:YES];
-    
-    _wampDeferred = [[SPDeferred alloc] init];
-    
-    _wampSocket = [[MDWamp alloc] initWithUrl:@"ws://localhost:9000" delegate:self];
-    
-    [_wampSocket connect];
+    _storage = [[SPPuppyStorage alloc] initWithServerPath:@"ws://localhost:9000"];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     self.viewController = [[SPPuppyTableViewController alloc] initWithStyle:UITableViewStylePlain];
     
-    [self.viewController setSocketOpenPromise:_wampDeferred.promise];
+    [self.viewController setStorage:_storage];
     
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];

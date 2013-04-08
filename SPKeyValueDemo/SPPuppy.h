@@ -9,8 +9,12 @@
 #import <Foundation/Foundation.h>
 
 @interface SPPuppy : NSObject
-@property (nonatomic, strong) NSString* puppyName;
-@property (nonatomic, strong) NSString* puppyDescription;
+@property (nonatomic, strong) NSString* gid;
+@property (nonatomic, strong) NSString* name;
+@property (nonatomic, strong) NSString* about;
 @property (nonatomic, assign, getter = isFavorite) BOOL favorite;
 @property (nonatomic, strong) NSString* imagePath;
+
++ (SPPuppy*)fromJSON:(NSDictionary*)json;
+
 @end
