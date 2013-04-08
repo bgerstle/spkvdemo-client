@@ -1,3 +1,6 @@
 [submodule "SPSuccinct"]
 	path = SPSuccinct
 	url = git.spotify.net:SPSuccinct
+[submodule "SocketRocket"]
+	path = SocketRocket
+	url = https://github.com/square/SocketRocket.git
