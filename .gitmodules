@@ -1,0 +1,3 @@
+[submodule "SPSuccinct"]
+	path = SPSuccinct
+	url = git.spotify.net:SPSuccinct
