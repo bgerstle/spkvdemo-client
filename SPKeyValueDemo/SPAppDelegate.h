@@ -8,12 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@class SPViewController;
+@class SPPuppyTableViewController;
 
 @interface SPAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (strong, nonatomic) SPViewController *viewController;
+@property (strong, nonatomic) SPPuppyTableViewController *viewController;
 
 @end

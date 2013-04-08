@@ -16,8 +16,6 @@
 		BC934C1D1712F76500835B9B /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = BC934C1C1712F76500835B9B /* Default.png */; };
 		BC934C1F1712F76500835B9B /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BC934C1E1712F76500835B9B /* Default@2x.png */; };
 		BC934C211712F76500835B9B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BC934C201712F76500835B9B /* Default-568h@2x.png */; };
-		BC934C241712F76500835B9B /* SPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934C231712F76500835B9B /* SPViewController.m */; };
-		BC934C271712F76500835B9B /* SPViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC934C251712F76500835B9B /* SPViewController.xib */; };
 		BC934C2F1712F76500835B9B /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC934C2E1712F76500835B9B /* SenTestingKit.framework */; };
 		BC934C301712F76500835B9B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC934C0A1712F76500835B9B /* UIKit.framework */; };
 		BC934C311712F76500835B9B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC934C0C1712F76500835B9B /* Foundation.framework */; };
@@ -35,6 +33,11 @@
 		BC934C801712F89000835B9B /* SPLifetimeGlue.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934C6F1712F89000835B9B /* SPLifetimeGlue.m */; };
 		BC934C811712F89000835B9B /* SPLowVerbosity.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934C711712F89000835B9B /* SPLowVerbosity.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BC934C821712F89000835B9B /* SPLowVerbosity.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934C711712F89000835B9B /* SPLowVerbosity.m */; };
+		BC934CA11713281000835B9B /* SPPuppyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CA01713281000835B9B /* SPPuppyTableViewController.m */; };
+		BC934CA71713295E00835B9B /* MDWamp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC934CA61713295E00835B9B /* MDWamp.framework */; };
+		BC934CA91713296E00835B9B /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC934CA81713296E00835B9B /* CFNetwork.framework */; };
+		BC934CAB1713297300835B9B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC934CAA1713297300835B9B /* Security.framework */; };
+		BC934CAD171329D200835B9B /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BC934CAC171329D200835B9B /* libicucore.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,9 +64,6 @@
 		BC934C1C1712F76500835B9B /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		BC934C1E1712F76500835B9B /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		BC934C201712F76500835B9B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		BC934C221712F76500835B9B /* SPViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SPViewController.h; sourceTree = "<group>"; };
-		BC934C231712F76500835B9B /* SPViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SPViewController.m; sourceTree = "<group>"; };
-		BC934C261712F76500835B9B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SPViewController.xib; sourceTree = "<group>"; };
 		BC934C2D1712F76500835B9B /* SPKeyValueDemoTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SPKeyValueDemoTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC934C2E1712F76500835B9B /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		BC934C361712F76500835B9B /* SPKeyValueDemoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SPKeyValueDemoTests-Info.plist"; sourceTree = "<group>"; };
@@ -83,6 +83,12 @@
 		BC934C701712F89000835B9B /* SPLowVerbosity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPLowVerbosity.h; sourceTree = "<group>"; };
 		BC934C711712F89000835B9B /* SPLowVerbosity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPLowVerbosity.m; sourceTree = "<group>"; };
 		BC934C741712F89000835B9B /* SPSuccinct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPSuccinct.h; sourceTree = "<group>"; };
+		BC934C9F1713281000835B9B /* SPPuppyTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPPuppyTableViewController.h; sourceTree = "<group>"; };
+		BC934CA01713281000835B9B /* SPPuppyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPPuppyTableViewController.m; sourceTree = "<group>"; };
+		BC934CA61713295E00835B9B /* MDWamp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MDWamp.framework; path = "../../Library/Developer/Xcode/DerivedData/MDWamp-esezqfvrvkrxtybbmfcmgidegugs/Build/Products/Debug-iphoneos/MDWamp.framework"; sourceTree = "<group>"; };
+		BC934CA81713296E00835B9B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		BC934CAA1713297300835B9B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		BC934CAC171329D200835B9B /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,9 +96,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC934CAD171329D200835B9B /* libicucore.dylib in Frameworks */,
+				BC934CAB1713297300835B9B /* Security.framework in Frameworks */,
+				BC934CA91713296E00835B9B /* CFNetwork.framework in Frameworks */,
 				BC934C0B1712F76500835B9B /* UIKit.framework in Frameworks */,
 				BC934C0D1712F76500835B9B /* Foundation.framework in Frameworks */,
 				BC934C0F1712F76500835B9B /* CoreGraphics.framework in Frameworks */,
+				BC934CA71713295E00835B9B /* MDWamp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,6 +142,10 @@
 			isa = PBXGroup;
 			children = (
 				BC934C641712F89000835B9B /* SPSuccinct */,
+				BC934CA61713295E00835B9B /* MDWamp.framework */,
+				BC934CAC171329D200835B9B /* libicucore.dylib */,
+				BC934CAA1713297300835B9B /* Security.framework */,
+				BC934CA81713296E00835B9B /* CFNetwork.framework */,
 				BC934C0A1712F76500835B9B /* UIKit.framework */,
 				BC934C0C1712F76500835B9B /* Foundation.framework */,
 				BC934C0E1712F76500835B9B /* CoreGraphics.framework */,
@@ -145,9 +159,8 @@
 			children = (
 				BC934C191712F76500835B9B /* SPAppDelegate.h */,
 				BC934C1A1712F76500835B9B /* SPAppDelegate.m */,
-				BC934C221712F76500835B9B /* SPViewController.h */,
-				BC934C231712F76500835B9B /* SPViewController.m */,
-				BC934C251712F76500835B9B /* SPViewController.xib */,
+				BC934C9F1713281000835B9B /* SPPuppyTableViewController.h */,
+				BC934CA01713281000835B9B /* SPPuppyTableViewController.m */,
 				BC934C111712F76500835B9B /* Supporting Files */,
 			);
 			path = SPKeyValueDemo;
@@ -283,7 +296,6 @@
 				BC934C1D1712F76500835B9B /* Default.png in Resources */,
 				BC934C1F1712F76500835B9B /* Default@2x.png in Resources */,
 				BC934C211712F76500835B9B /* Default-568h@2x.png in Resources */,
-				BC934C271712F76500835B9B /* SPViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,13 +332,13 @@
 			files = (
 				BC934C171712F76500835B9B /* main.m in Sources */,
 				BC934C1B1712F76500835B9B /* SPAppDelegate.m in Sources */,
-				BC934C241712F76500835B9B /* SPViewController.m in Sources */,
 				BC934C771712F89000835B9B /* SPDebugging.m in Sources */,
 				BC934C791712F89000835B9B /* SPDepends.m in Sources */,
 				BC934C7B1712F89000835B9B /* SPFunctional.m in Sources */,
 				BC934C7D1712F89000835B9B /* SPKVONotificationCenter.m in Sources */,
 				BC934C7F1712F89000835B9B /* SPLifetimeGlue.m in Sources */,
 				BC934C811712F89000835B9B /* SPLowVerbosity.m in Sources */,
+				BC934CA11713281000835B9B /* SPPuppyTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,14 +373,6 @@
 				BC934C141712F76500835B9B /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		BC934C251712F76500835B9B /* SPViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				BC934C261712F76500835B9B /* en */,
-			);
-			name = SPViewController.xib;
 			sourceTree = "<group>";
 		};
 		BC934C371712F76500835B9B /* InfoPlist.strings */ = {
@@ -441,6 +445,10 @@
 		BC934C401712F76500835B9B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../Library/Developer/Xcode/DerivedData/MDWamp-esezqfvrvkrxtybbmfcmgidegugs/Build/Products/Debug-iphoneos\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SPKeyValueDemo/SPKeyValueDemo-Prefix.pch";
 				INFOPLIST_FILE = "SPKeyValueDemo/SPKeyValueDemo-Info.plist";
@@ -452,6 +460,10 @@
 		BC934C411712F76500835B9B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../Library/Developer/Xcode/DerivedData/MDWamp-esezqfvrvkrxtybbmfcmgidegugs/Build/Products/Debug-iphoneos\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SPKeyValueDemo/SPKeyValueDemo-Prefix.pch";
 				INFOPLIST_FILE = "SPKeyValueDemo/SPKeyValueDemo-Info.plist";
@@ -513,6 +525,7 @@
 				BC934C411712F76500835B9B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BC934C421712F76500835B9B /* Build configuration list for PBXNativeTarget "SPKeyValueDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -521,6 +534,7 @@
 				BC934C441712F76500835B9B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

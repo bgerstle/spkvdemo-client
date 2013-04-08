@@ -7,18 +7,42 @@
 //
 
 #import "SPAppDelegate.h"
+#import <MDWamp/MDWamp.h>
+#import "SPPuppyTableViewController.h"
 
-#import "SPViewController.h"
+@interface SPAppDelegate ()
+<MDWampDelegate>
+{
+    MDWamp* _wampSocket;
+}
+
+@end
 
 @implementation SPAppDelegate
 
+#pragma mark - MDWampDelegate
+
+
+
+#pragma mark - UIApplicationDelegate
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [MDWamp setDebug:YES];
+    
+    _wampSocket = [[MDWamp alloc] initWithUrl:[NSURL URLWithString:@"ws://localhost:9000"] delegate:self];
+    
+    [_wampSocket connect];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    self.viewController = [[SPViewController alloc] initWithNibName:@"SPViewController" bundle:nil];
+    self.viewController = [[SPPuppyTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    
+    _viewController.wampSocket = _wampSocket;
+    
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
+    
     return YES;
 }
 
