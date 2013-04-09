@@ -49,16 +49,23 @@
     [_wampSocket unsubscribeTopic:@"pups"];
 }
 
-- (NSMutableDictionary*)updatePuppies:(NSDictionary*)results pupsToRemove:(NSArray**)outRemovePups
+- (NSMutableDictionary*)updatePuppies:(NSDictionary*)results
+                         pupsToRemove:(NSArray**)outRemovePups
+                     outUpdateSorting:(BOOL*)outUpdateSorting
 {
     NSMutableArray* removePups = outRemovePups ? [[NSMutableArray alloc] initWithCapacity:[results count]] : nil;
+    __block BOOL needsSortingUpdate = NO;
     NSMutableDictionary* uniquePups = [results map:^id(NSString* gid, NSDictionary* vals, BOOL *stop) {
         SPPuppy* puppy = _puppyMap[gid];
-        if (!puppy) {
+        if (!puppy && [vals count]) {
             puppy = [SPPuppy fromJSON:vals];
             puppy.gid = gid;
             return @{puppy.gid: puppy};
         } else if ([vals count]) {
+            if ([[vals allKeys] containsObject:_sortDescriptor.key]
+                && [[puppy valueForKey:_sortDescriptor.key] isEqual:vals[_sortDescriptor.key]]) {
+                needsSortingUpdate = YES;
+            }
             [puppy setValuesForKeysWithDictionary:vals];
         } else {
             [removePups addObject:gid];
@@ -66,6 +73,10 @@
         
         return nil;
     }];
+    
+    if (outUpdateSorting) {
+        *outUpdateSorting = needsSortingUpdate;
+    }
     
     if (outRemovePups) {
         (*outRemovePups) = removePups;
@@ -168,7 +179,10 @@
 - (void)mergePuppies:(NSDictionary*)results
 {
     NSArray* pupsToRemove = nil;
-    NSMutableDictionary* pups = [self updatePuppies:results pupsToRemove:&pupsToRemove];
+    BOOL forceSortingUpdate = NO;
+    NSMutableDictionary* pups = [self updatePuppies:results
+                                       pupsToRemove:&pupsToRemove
+                                   outUpdateSorting:&forceSortingUpdate];
     
     if ([pups count]) {
         [self insertPups:pups];
@@ -177,6 +191,19 @@
     if ([pupsToRemove count]) {
         [self removePups:pupsToRemove];
     }
+    
+    if (forceSortingUpdate && ![pups count] && ![pupsToRemove count]) {
+        [self updatePupSorting];
+    }
+}
+
+- (void)updatePupSorting
+{
+    // lazy impl
+    [self willChangeValueForKey:@"puppies"];
+    _sortedPuppies = nil;
+    [self generateSortedPuppiesIfNil];
+    [self didChangeValueForKey:@"puppies"];
 }
 
 - (void)removePups:(NSArray*)pupGIDs
