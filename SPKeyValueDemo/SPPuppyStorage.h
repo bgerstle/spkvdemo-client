@@ -23,4 +23,7 @@
 
 - (SPPromise*)getPup:(NSString*)gid;
 
+- (void)subscribeToPups;
+- (void)unsubscribedToPups;
+
 @end
