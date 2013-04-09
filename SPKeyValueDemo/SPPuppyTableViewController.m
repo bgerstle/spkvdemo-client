@@ -8,11 +8,14 @@
 
 #import "SPPuppyTableViewController.h"
 #import "SPFunctional.h"
+#import "SPLowVerbosity.h"
 #import "SPDepends.h"
 
 @interface SPPuppyTableViewController ()
-@property (nonatomic, strong) NSMutableDictionary* pupBindings;
+@property (nonatomic, strong) UIView* maskView;
 @end
+
+#define kCellBindingFormat @"%d.%@"
 
 @implementation SPPuppyTableViewController
 
@@ -20,34 +23,63 @@
 {
     if (![storage isEqual:_storage]) {
         _storage = storage;
-        
-        $depends(@"puppies", _storage, @"puppies", ^ (NSDictionary* change, id obj, NSString* keypath){
-            NSLog(@"Updating table w/ change: %@", change);
-            if ([keypath isEqualToString:@"puppies"]) {
-                [selff.tableView beginUpdates];
-                
-                NSIndexSet* indexes = change[NSKeyValueChangeIndexesKey];
-                NSMutableArray* indexPaths = [[NSMutableArray alloc] initWithCapacity:[indexes count]];
-                [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
-                    [indexPaths addObject:[NSIndexPath indexPathForRow:idx inSection:0]];
-                }];
-                switch ([change[NSKeyValueChangeKindKey] intValue]) {
-                    case NSKeyValueChangeRemoval:
-                        [selff.tableView deleteRowsAtIndexPaths:indexPaths
-                                               withRowAnimation:UITableViewRowAnimationAutomatic];
-                        break;
-                    case NSKeyValueChangeInsertion:
-                        [selff.tableView insertRowsAtIndexPaths:indexPaths
-                                               withRowAnimation:UITableViewRowAnimationAutomatic];
-                        break;
-                    default:
-                        break;
-                }
-                
-                [selff.tableView endUpdates];
-            }
-        });
+        [self maybeAddStorageDependencies];
     }
+}
+
+- (void)maybeAddStorageDependencies
+{
+    if (!_storage || ![self isViewLoaded]) {
+        return;
+    }
+    
+    [self sp_removeDependency:@"puppies"];
+    [self sp_removeDependency:@"pupsOnline"];
+    
+    $sp_decl_wself;
+    SPAddDependencyV(self,@"puppies", _storage, @"puppies", ^ (NSDictionary* change, id obj, NSString* keypath){
+        NSLog(@"Updating table w/ change: %@", change);
+        [weakSelf.tableView beginUpdates];
+        
+        NSIndexSet* indexes = change[NSKeyValueChangeIndexesKey];
+        NSMutableArray* indexPaths = [[NSMutableArray alloc] initWithCapacity:[indexes count]];
+        [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+            [indexPaths addObject:[NSIndexPath indexPathForRow:idx inSection:0]];
+        }];
+        switch ([change[NSKeyValueChangeKindKey] intValue]) {
+            case NSKeyValueChangeRemoval:
+                [weakSelf.tableView deleteRowsAtIndexPaths:indexPaths
+                                          withRowAnimation:UITableViewRowAnimationAutomatic];
+                break;
+            case NSKeyValueChangeInsertion:
+                [weakSelf.tableView insertRowsAtIndexPaths:indexPaths
+                                          withRowAnimation:UITableViewRowAnimationAutomatic];
+                break;
+            default:
+                break;
+        }
+        
+        [weakSelf.tableView endUpdates];
+    }, nil);
+    
+    SPAddDependencyV(self, @"pupsOnline", _storage, @"online", ^ (NSDictionary* change, id obj, NSString* keypath) {
+        if ([weakSelf.storage isOnline]) {
+            [weakSelf.storage getPups];
+            [weakSelf.storage subscribeToPups];
+            [weakSelf.maskView removeFromSuperview];
+        } else {
+            if(weakSelf.maskView.superview) {
+                return;
+            } else if (!weakSelf.maskView) {
+                weakSelf.maskView = [[UIView alloc] initWithFrame:weakSelf.view.bounds];
+                weakSelf.maskView.backgroundColor = [UIColor blackColor];
+                weakSelf.maskView.alpha = 0.7;
+                weakSelf.maskView.userInteractionEnabled = NO;
+            }
+        
+            [weakSelf.view addSubview:_maskView];
+        }
+    }, nil);
 }
 
 #pragma mark - UITableViewController Stuff
@@ -56,7 +88,6 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        _pupBindings = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -70,10 +101,7 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-    [_storage getPups];
-    
-    [_storage subscribeToPups];
+    [self maybeAddStorageDependencies];
 }
 
 - (void)didReceiveMemoryWarning
@@ -105,32 +133,25 @@
         cell.textLabel.textColor = [UIColor blackColor];
     }
     
-    NSParameterAssert(_pupBindings);
     SPPuppy* pup = [_storage mutableArrayValueForKey:@"puppies"][indexPath.row];
     
     // Configure the cell...
-    SPDependency* binding1 =
-    SPAddDependencyV(nil, @"table view cell", pup, @"name",
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-variable"
+    // hiding warnig for unused weak self (selff) var declared by $depends
+    $depends($sprintf(kCellBindingFormat, indexPath.row, @"name"), pup, @"name",
              ^ (NSDictionary* change, id obj, NSString* keypath) {
-        cell.textLabel.text = pup.name;
-    }, nil);
-
-    SPDependency* binding2 =
-    SPAddDependencyV(nil, @"table view cell", pup, @"about",
-                     ^ (NSDictionary* change, id obj, NSString* keypath) {
-                         cell.detailTextLabel.text = pup.about;
-                     }, nil);
-    
-    SPDependency* binding3 =
-    SPAddDependencyV(nil, @"table view cell", pup, @"favorite",
-                     ^ (NSDictionary* change, id obj, NSString* keypath) {
-                         cell.accessoryType = pup.isFavorite ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-                     }, nil);
-
-    
-    id key = @(indexPath.row);
-    [_pupBindings[key] makeObjectsPerformSelector:@selector(invalidate)];
-    _pupBindings[key] = @[binding1, binding2, binding3];
+                 cell.textLabel.text = pup.name;
+             }, nil);
+    $depends($sprintf(kCellBindingFormat, indexPath.row, @"about"), pup, @"about",
+             ^ (NSDictionary* change, id obj, NSString* keypath) {
+                 cell.detailTextLabel.text = pup.about;
+             }, nil);
+    $depends($sprintf(kCellBindingFormat, indexPath.row, @"favorite"), pup, @"favorite",
+             ^ (NSDictionary* change, id obj, NSString* keypath) {
+                 cell.accessoryType = pup.isFavorite ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+             }, nil);
+#pragma clang diagnostic pop
     
     return cell;
 }
@@ -176,9 +197,9 @@
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    id key = @(indexPath.row);
-    [_pupBindings[key] makeObjectsPerformSelector:@selector(invalidate)];
-    [_pupBindings removeObjectForKey:key];
+    [self sp_removeDependency:$sprintf(kCellBindingFormat, indexPath.row, @"name")];
+    [self sp_removeDependency:$sprintf(kCellBindingFormat, indexPath.row, @"about")];
+    [self sp_removeDependency:$sprintf(kCellBindingFormat, indexPath.row, @"favorite")];
 }
 
 #pragma mark - Table view delegate

@@ -13,7 +13,10 @@
 
 @interface SPPuppyStorage : NSObject
 @property (nonatomic, retain) NSSortDescriptor* sortDescriptor;
-@property (nonatomic, retain, readonly) NSMutableArray* puppies;
+@property (nonatomic, assign, readonly, getter=isOnline) BOOL online;
+
+/// Access `puppies` indirectly using mutablerArrayValueForKey:@"puppies"
+//@property (nonatomic, readonly) NSMutableArray* puppies;
 
 - (id)initWithServerPath:(NSString*)puppyServer;
 

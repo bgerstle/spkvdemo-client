@@ -18,10 +18,10 @@
 @property (nonatomic, strong) NSMutableDictionary* pendingCalls;
 @property (nonatomic, strong) NSMutableDictionary* puppyMap;
 @property (nonatomic, strong) NSArray* sortedPuppies;
+@property (nonatomic, assign, readwrite, getter=isOnline) BOOL online;
 @end
 
 @implementation SPPuppyStorage
-@dynamic puppies;
 
 - (id)initWithServerPath:(NSString*)puppyServer
 {
@@ -223,6 +223,15 @@
 
 #pragma mark - Accessors
 
+- (void)setOnline:(BOOL)online
+{
+    if (online != _online) {
+        [self willChangeValueForKey:@"online"];
+        _online = online;
+        [self didChangeValueForKey:@"online"];
+    }
+}
+
 - (SPPromise*)socketReady
 {
     return [_socketReadyDfr promise];
@@ -343,6 +352,8 @@
         [_wampSocket prefix:prefix uri:uri];
     }];
     
+    self.online = YES;
+    
     [_socketReadyDfr resolve];
 }
 
@@ -351,11 +362,17 @@
     [_socketReadyDfr reject:[NSError errorWithDomain:@"MDWampErrorDomain"
                                               code:code
                                             userInfo:reason ? @{NSLocalizedFailureReasonErrorKey: reason} : nil]];
-    _socketReadyDfr = nil;
+    
+    // reset the deferred so consumers can register callbacks for when we go online again
+    _socketReadyDfr = [[SPDeferred alloc] init];
+    
+    self.online = NO;
 }
 
 - (void)onError:(NSString *)errorUri description:(NSString *)errorDesc forCalledUri:(NSString *)callUri
 {
+    NSLog(@"MDwamp error! %@", @{@"uri": errorUri, @"desc": errorDesc, @"callURI": callUri});
+    
     @synchronized(self) {
         [_pendingCalls[callUri] reject:[NSError errorWithDomain:errorUri code:-1 userInfo:@{NSLocalizedFailureReasonErrorKey: errorDesc}]];
     }
