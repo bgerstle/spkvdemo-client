@@ -56,6 +56,7 @@
                                           withRowAnimation:UITableViewRowAnimationAutomatic];
                 break;
             default:
+                [weakSelf.tableView reloadData];
                 break;
         }
         
