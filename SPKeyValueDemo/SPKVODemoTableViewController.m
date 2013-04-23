@@ -1,25 +1,25 @@
 //
-//  SPPuppyTableViewController.m
+//  SPKVODemoTableViewController.m
 //  SPKeyValueDemo
 //
 //  Created by Brian Gerstle on 4/8/13.
 //  Copyright (c) 2013 Spotify. All rights reserved.
 //
 
-#import "SPPuppyTableViewController.h"
+#import "SPKVODemoTableViewController.h"
 #import "SPFunctional.h"
 #import "SPLowVerbosity.h"
 #import "SPDepends.h"
 
-@interface SPPuppyTableViewController ()
+@interface SPKVODemoTableViewController ()
 @property (nonatomic, strong) UIView* maskView;
 @end
 
 #define kCellBindingFormat @"%d.%@"
 
-@implementation SPPuppyTableViewController
+@implementation SPKVODemoTableViewController
 
-- (void)setStorage:(SPPuppyStorage *)storage
+- (void)setStorage:(SPKVODemoStorage *)storage
 {
     if (![storage isEqual:_storage]) {
         _storage = storage;
@@ -33,11 +33,11 @@
         return;
     }
     
-    [self sp_removeDependency:@"puppies"];
-    [self sp_removeDependency:@"pupsOnline"];
+    [self sp_removeDependency:@"objects"];
+    [self sp_removeDependency:@"remoteOnline"];
     
     $sp_decl_wself;
-    SPAddDependencyV(self,@"puppies", _storage, @"puppies", ^ (NSDictionary* change, id obj, NSString* keypath){
+    SPAddDependencyV(self,@"objects", _storage, @"objects", ^ (NSDictionary* change, id obj, NSString* keypath){
         NSLog(@"Updating table w/ change: %@", change);
         [weakSelf.tableView beginUpdates];
         
@@ -63,10 +63,10 @@
         [weakSelf.tableView endUpdates];
     }, nil);
     
-    SPAddDependencyV(self, @"pupsOnline", _storage, @"online", ^ (NSDictionary* change, id obj, NSString* keypath) {
+    SPAddDependencyV(self, @"remoteOnline", _storage, @"online", ^ (NSDictionary* change, id obj, NSString* keypath) {
         if ([weakSelf.storage isOnline]) {
-            [weakSelf.storage getPups];
-            [weakSelf.storage subscribeToPups];
+            [weakSelf.storage getRemoteObjects];
+            [weakSelf.storage subscribeToAllObjects];
             [weakSelf.maskView removeFromSuperview];
         } else {
             if(weakSelf.maskView.superview) {
@@ -122,7 +122,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [[_storage valueForKeyPath:@"puppies.@count"] intValue];
+    return [[_storage valueForKeyPath:@"objects.@count"] intValue];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -134,23 +134,23 @@
         cell.textLabel.textColor = [UIColor blackColor];
     }
     
-    SPPuppy* pup = [_storage mutableArrayValueForKey:@"puppies"][indexPath.row];
+    SPKVODemoObject* obj = [_storage mutableArrayValueForKey:@"objects"][indexPath.row];
     
     // Configure the cell...
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-variable"
     // hiding warnig for unused weak self (selff) var declared by $depends
-    $depends($sprintf(kCellBindingFormat, indexPath.row, @"name"), pup, @"name",
-             ^ (NSDictionary* change, id obj, NSString* keypath) {
-                 cell.textLabel.text = pup.name;
+    $depends($sprintf(kCellBindingFormat, indexPath.row, @"name"), obj, @"name",
+             ^ (NSDictionary* change, SPKVODemoObject* aObj, NSString* keypath) {
+                 cell.textLabel.text = obj.name;
              }, nil);
-    $depends($sprintf(kCellBindingFormat, indexPath.row, @"about"), pup, @"about",
-             ^ (NSDictionary* change, id obj, NSString* keypath) {
-                 cell.detailTextLabel.text = pup.about;
+    $depends($sprintf(kCellBindingFormat, indexPath.row, @"about"), obj, @"about",
+             ^ (NSDictionary* change, SPKVODemoObject* aObj, NSString* keypath) {
+                 cell.detailTextLabel.text = obj.about;
              }, nil);
-    $depends($sprintf(kCellBindingFormat, indexPath.row, @"favorite"), pup, @"favorite",
-             ^ (NSDictionary* change, id obj, NSString* keypath) {
-                 cell.accessoryType = pup.isFavorite ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    $depends($sprintf(kCellBindingFormat, indexPath.row, @"favorite"), obj, @"favorite",
+             ^ (NSDictionary* change, SPKVODemoObject* aObj, NSString* keypath) {
+                 cell.accessoryType = obj.isFavorite ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
              }, nil);
 #pragma clang diagnostic pop
     

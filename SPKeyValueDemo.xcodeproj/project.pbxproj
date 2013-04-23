@@ -33,17 +33,17 @@
 		BC934C801712F89000835B9B /* SPLifetimeGlue.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934C6F1712F89000835B9B /* SPLifetimeGlue.m */; };
 		BC934C811712F89000835B9B /* SPLowVerbosity.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934C711712F89000835B9B /* SPLowVerbosity.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BC934C821712F89000835B9B /* SPLowVerbosity.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934C711712F89000835B9B /* SPLowVerbosity.m */; };
-		BC934CA11713281000835B9B /* SPPuppyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CA01713281000835B9B /* SPPuppyTableViewController.m */; };
+		BC934CA11713281000835B9B /* SPKVODemoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CA01713281000835B9B /* SPKVODemoTableViewController.m */; };
 		BC934CA71713295E00835B9B /* MDWamp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC934CA61713295E00835B9B /* MDWamp.framework */; };
 		BC934CA91713296E00835B9B /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC934CA81713296E00835B9B /* CFNetwork.framework */; };
 		BC934CAB1713297300835B9B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC934CAA1713297300835B9B /* Security.framework */; };
 		BC934CAD171329D200835B9B /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BC934CAC171329D200835B9B /* libicucore.dylib */; };
-		BC934CB217132A7500835B9B /* SPPuppy.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CB117132A7500835B9B /* SPPuppy.m */; };
+		BC934CB217132A7500835B9B /* SPKVODemoObject.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CB117132A7500835B9B /* SPKVODemoObject.m */; };
 		BC934CBF1713419200835B9B /* SPDeferred.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CB61713419200835B9B /* SPDeferred.m */; };
 		BC934CC01713419200835B9B /* SPDeferredCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CB91713419200835B9B /* SPDeferredCallback.m */; };
 		BC934CC11713419200835B9B /* SPMasterDeferred.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CBB1713419200835B9B /* SPMasterDeferred.m */; };
 		BC934CC21713419200835B9B /* SPPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CBD1713419200835B9B /* SPPromise.m */; };
-		BC934CC61713545800835B9B /* SPPuppyStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CC51713545800835B9B /* SPPuppyStorage.m */; };
+		BC934CC61713545800835B9B /* SPKVODemoStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CC51713545800835B9B /* SPKVODemoStorage.m */; };
 		BC934CC917136D1800835B9B /* NSCollection+Map.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CC817136D1800835B9B /* NSCollection+Map.m */; };
 		BC934CCA17136D1800835B9B /* NSCollection+Map.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CC817136D1800835B9B /* NSCollection+Map.m */; };
 /* End PBXBuildFile section */
@@ -91,14 +91,14 @@
 		BC934C701712F89000835B9B /* SPLowVerbosity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPLowVerbosity.h; sourceTree = "<group>"; };
 		BC934C711712F89000835B9B /* SPLowVerbosity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPLowVerbosity.m; sourceTree = "<group>"; };
 		BC934C741712F89000835B9B /* SPSuccinct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPSuccinct.h; sourceTree = "<group>"; };
-		BC934C9F1713281000835B9B /* SPPuppyTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPPuppyTableViewController.h; sourceTree = "<group>"; };
-		BC934CA01713281000835B9B /* SPPuppyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPPuppyTableViewController.m; sourceTree = "<group>"; };
+		BC934C9F1713281000835B9B /* SPKVODemoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPKVODemoTableViewController.h; sourceTree = "<group>"; };
+		BC934CA01713281000835B9B /* SPKVODemoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPKVODemoTableViewController.m; sourceTree = "<group>"; };
 		BC934CA61713295E00835B9B /* MDWamp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MDWamp.framework; path = "../../Library/Developer/Xcode/DerivedData/MDWamp-esezqfvrvkrxtybbmfcmgidegugs/Build/Products/Debug-iphoneos/MDWamp.framework"; sourceTree = "<group>"; };
 		BC934CA81713296E00835B9B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		BC934CAA1713297300835B9B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BC934CAC171329D200835B9B /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
-		BC934CB017132A7500835B9B /* SPPuppy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPPuppy.h; sourceTree = "<group>"; };
-		BC934CB117132A7500835B9B /* SPPuppy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPPuppy.m; sourceTree = "<group>"; };
+		BC934CB017132A7500835B9B /* SPKVODemoObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPKVODemoObject.h; sourceTree = "<group>"; };
+		BC934CB117132A7500835B9B /* SPKVODemoObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPKVODemoObject.m; sourceTree = "<group>"; };
 		BC934CB51713419200835B9B /* SPDeferred.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SPDeferred.h; path = ../spdeferred/SPDeferred/Source/SPDeferred.h; sourceTree = "<group>"; };
 		BC934CB61713419200835B9B /* SPDeferred.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SPDeferred.m; path = ../spdeferred/SPDeferred/Source/SPDeferred.m; sourceTree = "<group>"; };
 		BC934CB71713419200835B9B /* SPDeferred_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SPDeferred_Internal.h; path = ../spdeferred/SPDeferred/Source/SPDeferred_Internal.h; sourceTree = "<group>"; };
@@ -110,8 +110,8 @@
 		BC934CBD1713419200835B9B /* SPPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SPPromise.m; path = ../spdeferred/SPDeferred/Source/SPPromise.m; sourceTree = "<group>"; };
 		BC934CBE1713419200835B9B /* SPPromise_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SPPromise_Internal.h; path = ../spdeferred/SPDeferred/Source/SPPromise_Internal.h; sourceTree = "<group>"; };
 		BC934CC31713423400835B9B /* SPDeferredBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SPDeferredBase.h; path = ../spdeferred/SPDeferred/Source/SPDeferredBase.h; sourceTree = "<group>"; };
-		BC934CC41713545800835B9B /* SPPuppyStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPPuppyStorage.h; sourceTree = "<group>"; };
-		BC934CC51713545800835B9B /* SPPuppyStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPPuppyStorage.m; sourceTree = "<group>"; };
+		BC934CC41713545800835B9B /* SPKVODemoStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPKVODemoStorage.h; sourceTree = "<group>"; };
+		BC934CC51713545800835B9B /* SPKVODemoStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPKVODemoStorage.m; sourceTree = "<group>"; };
 		BC934CC717136D1800835B9B /* NSCollection+Map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSCollection+Map.h"; sourceTree = "<group>"; };
 		BC934CC817136D1800835B9B /* NSCollection+Map.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSCollection+Map.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -252,8 +252,8 @@
 		BC934CAE17132A6000835B9B /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				BC934C9F1713281000835B9B /* SPPuppyTableViewController.h */,
-				BC934CA01713281000835B9B /* SPPuppyTableViewController.m */,
+				BC934C9F1713281000835B9B /* SPKVODemoTableViewController.h */,
+				BC934CA01713281000835B9B /* SPKVODemoTableViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -261,10 +261,10 @@
 		BC934CAF17132A6700835B9B /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				BC934CB017132A7500835B9B /* SPPuppy.h */,
-				BC934CB117132A7500835B9B /* SPPuppy.m */,
-				BC934CC41713545800835B9B /* SPPuppyStorage.h */,
-				BC934CC51713545800835B9B /* SPPuppyStorage.m */,
+				BC934CB017132A7500835B9B /* SPKVODemoObject.h */,
+				BC934CB117132A7500835B9B /* SPKVODemoObject.m */,
+				BC934CC41713545800835B9B /* SPKVODemoStorage.h */,
+				BC934CC51713545800835B9B /* SPKVODemoStorage.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -412,13 +412,13 @@
 				BC934C7D1712F89000835B9B /* SPKVONotificationCenter.m in Sources */,
 				BC934C7F1712F89000835B9B /* SPLifetimeGlue.m in Sources */,
 				BC934C811712F89000835B9B /* SPLowVerbosity.m in Sources */,
-				BC934CA11713281000835B9B /* SPPuppyTableViewController.m in Sources */,
-				BC934CB217132A7500835B9B /* SPPuppy.m in Sources */,
+				BC934CA11713281000835B9B /* SPKVODemoTableViewController.m in Sources */,
+				BC934CB217132A7500835B9B /* SPKVODemoObject.m in Sources */,
 				BC934CBF1713419200835B9B /* SPDeferred.m in Sources */,
 				BC934CC01713419200835B9B /* SPDeferredCallback.m in Sources */,
 				BC934CC11713419200835B9B /* SPMasterDeferred.m in Sources */,
 				BC934CC21713419200835B9B /* SPPromise.m in Sources */,
-				BC934CC61713545800835B9B /* SPPuppyStorage.m in Sources */,
+				BC934CC61713545800835B9B /* SPKVODemoStorage.m in Sources */,
 				BC934CC917136D1800835B9B /* NSCollection+Map.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

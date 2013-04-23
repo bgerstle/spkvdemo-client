@@ -1,5 +1,5 @@
 //
-//  SPPuppy.h
+//  SPKVODemoObject.h
 //  SPKeyValueDemo
 //
 //  Created by Brian Gerstle on 4/8/13.
@@ -8,13 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SPPuppy : NSObject
+@interface SPKVODemoObject : NSObject
 @property (nonatomic, strong) NSString* gid;
 @property (nonatomic, strong) NSString* name;
 @property (nonatomic, strong) NSString* about;
 @property (nonatomic, assign, getter = isFavorite) BOOL favorite;
 @property (nonatomic, strong) NSString* imagePath;
 
-+ (SPPuppy*)fromJSON:(NSDictionary*)json;
++ (SPKVODemoObject*)fromJSON:(NSDictionary*)json;
 
 @end

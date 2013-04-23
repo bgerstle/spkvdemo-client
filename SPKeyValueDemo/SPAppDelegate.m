@@ -7,8 +7,8 @@
 //
 
 #import "SPAppDelegate.h"
-#import "SPPuppyTableViewController.h"
-#import "SPPuppyStorage.h"
+#import "SPKVODemoTableViewController.h"
+#import "SPKVODemoStorage.h"
 #import "SPPromise.h"
 
 @interface SPAppDelegate ()
@@ -16,17 +16,17 @@
 
 @implementation SPAppDelegate
 {
-    SPPuppyStorage* _storage;
+    SPKVODemoStorage* _storage;
 }
 #pragma mark - UIApplicationDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    _storage = [[SPPuppyStorage alloc] initWithServerPath:@"ws://localhost:9000"];
+    _storage = [[SPKVODemoStorage alloc] initWithServerPath:@"ws://localhost:9000" topic:@"pups"];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    self.viewController = [[SPPuppyTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    self.viewController = [[SPKVODemoTableViewController alloc] initWithStyle:UITableViewStylePlain];
     
     [self.viewController setStorage:_storage];
     

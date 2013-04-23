@@ -1,29 +1,30 @@
 //
-//  SPPuppyStorage.m
+//  SPKVODemoStorage.m
 //  SPKeyValueDemo
 //
 //  Created by Brian Gerstle on 4/8/13.
 //  Copyright (c) 2013 Spotify. All rights reserved.
 //
 
-#import "SPPuppyStorage.h"
+#import "SPKVODemoStorage.h"
 #import <MDWamp/MDWamp.h>
 #import "SPFunctional.h"
 #import "NSCollection+Map.h"
 
-@interface SPPuppyStorage ()
+@interface SPKVODemoStorage ()
 <MDWampEventDelegate, MDWampRpcDelegate, MDWampDelegate>
 @property (nonatomic, strong) SPDeferred* socketReadyDfr;
 @property (nonatomic, strong) MDWamp* wampSocket;
 @property (nonatomic, strong) NSMutableDictionary* pendingCalls;
-@property (nonatomic, strong) NSMutableDictionary* puppyMap;
-@property (nonatomic, strong) NSArray* sortedPuppies;
+@property (nonatomic, strong) NSMutableDictionary* objectMap;
+@property (nonatomic, strong) NSArray* sortedObjects;
+@property (nonatomic, strong) NSString* topic;
 @property (nonatomic, assign, readwrite, getter=isOnline) BOOL online;
 @end
 
-@implementation SPPuppyStorage
+@implementation SPKVODemoStorage
 
-- (id)initWithServerPath:(NSString*)puppyServer
+- (id)initWithServerPath:(NSString*)remote topic:(NSString*)topic
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -34,11 +35,12 @@
         return nil;
     }
     
-    _puppyMap = [[NSMutableDictionary alloc] init];
+    _topic = topic;
+    _objectMap = [[NSMutableDictionary alloc] init];
     _pendingCalls = [[NSMutableDictionary alloc] init];
     _sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
     _socketReadyDfr = [[SPDeferred alloc] init];
-    _wampSocket = [[MDWamp alloc] initWithUrl:puppyServer delegate:self];
+    _wampSocket = [[MDWamp alloc] initWithUrl:remote delegate:self];
     [_wampSocket connect];
     
     return self;
@@ -46,29 +48,29 @@
 
 - (void)dealloc
 {
-    [_wampSocket unsubscribeTopic:@"pups"];
+    [_wampSocket unsubscribeTopic:_topic];
 }
 
-- (NSMutableDictionary*)updatePuppies:(NSDictionary*)results
-                         pupsToRemove:(NSArray**)outRemovePups
+- (NSMutableDictionary*)updateObjects:(NSDictionary*)results
+                         objsToRemove:(NSArray**)outRemoveObjs
                      outUpdateSorting:(BOOL*)outUpdateSorting
 {
-    NSMutableArray* removePups = outRemovePups ? [[NSMutableArray alloc] initWithCapacity:[results count]] : nil;
+    NSMutableArray* removeObjs = outRemoveObjs ? [[NSMutableArray alloc] initWithCapacity:[results count]] : nil;
     __block BOOL needsSortingUpdate = NO;
-    NSMutableDictionary* uniquePups = [results map:^id(NSString* gid, NSDictionary* vals, BOOL *stop) {
-        SPPuppy* puppy = _puppyMap[gid];
-        if (!puppy && [vals count]) {
-            puppy = [SPPuppy fromJSON:vals];
-            puppy.gid = gid;
-            return @{puppy.gid: puppy};
+    NSMutableDictionary* uniqueObjs = [results map:^id(NSString* gid, NSDictionary* vals, BOOL *stop) {
+        SPKVODemoObject* obj = _objectMap[gid];
+        if (!obj && [vals count]) {
+            obj = [SPKVODemoObject fromJSON:vals];
+            obj.gid = gid;
+            return @{obj.gid: obj};
         } else if ([vals count]) {
             if ([[vals allKeys] containsObject:_sortDescriptor.key]
-                && [[puppy valueForKey:_sortDescriptor.key] isEqual:vals[_sortDescriptor.key]]) {
+                && [[obj valueForKey:_sortDescriptor.key] isEqual:vals[_sortDescriptor.key]]) {
                 needsSortingUpdate = YES;
             }
-            [puppy setValuesForKeysWithDictionary:vals];
+            [obj setValuesForKeysWithDictionary:vals];
         } else {
-            [removePups addObject:gid];
+            [removeObjs addObject:gid];
         }
         
         return nil;
@@ -78,10 +80,10 @@
         *outUpdateSorting = needsSortingUpdate;
     }
     
-    if (outRemovePups) {
-        (*outRemovePups) = removePups;
+    if (outRemoveObjs) {
+        (*outRemoveObjs) = removeObjs;
     }
-    return uniquePups;
+    return uniqueObjs;
 }
 
 #pragma mark - WAMP Abstractions
@@ -110,10 +112,10 @@
     }];
 }
 
-- (SPPromise*)getPups
+- (SPPromise*)getRemoteObjects
 {
     @synchronized(self) {
-        NSString* uri = @"pups:#get";
+        NSString* uri = [_topic stringByAppendingString:@":#get"];
         SPDeferred* pendingDfr = _pendingCalls[uri];
         if (pendingDfr) {
             return pendingDfr.promise;
@@ -123,8 +125,8 @@
         
         $sp_decl_wself;        
         [pendingDfr donePipe: ^ (NSDictionary* results) {
-            [weakSelf mergePuppies:results];
-            return weakSelf.sortedPuppies;
+            [weakSelf mergeObjects:results];
+            return weakSelf.sortedObjects;
         }];
         
         [self prepCall:uri withDeferred:pendingDfr postOpenBlock:^(id obj) {
@@ -135,10 +137,10 @@
     }
 }
 
-- (SPPromise*)getPup:(NSString*)gid
+- (SPPromise*)getRemoteObject:(NSString*)gid
 {
     @synchronized(self) {
-        NSString* uri = @"pups:#get";
+        NSString* uri = [_topic stringByAppendingString:@":#get"];
         SPDeferred* pendingDfr = _pendingCalls[uri];
         if (pendingDfr) {
             return pendingDfr.promise;
@@ -148,8 +150,8 @@
         
         $sp_decl_wself;
         [pendingDfr donePipe: ^id(NSDictionary* results) {
-            [weakSelf mergePuppies:results];
-            return weakSelf.puppyMap[[[results allKeys] lastObject]];
+            [weakSelf mergeObjects:results];
+            return weakSelf.objectMap[[[results allKeys] lastObject]];
         }];
         
         [self prepCall:uri withDeferred:pendingDfr postOpenBlock:^(id obj) {
@@ -160,92 +162,93 @@
     }
 }
 
-- (void)subscribeToPups
+- (void)subscribeToAllObjects
 {
     $sp_decl_wself;
     [_socketReadyDfr done:^(id obj) {
-        [weakSelf.wampSocket subscribeTopic:@"http://spkvexample.com/pups/" withDelegate:self];
+        [weakSelf.wampSocket subscribeTopic:[NSString stringWithFormat:@"http://spkvexample.com/%@/", _topic]
+                               withDelegate:self];
     }];
 }
 
-- (void)unsubscribedToPups
+- (void)unsubscribeFromAllObjects
 {
     $sp_decl_wself;
     [_socketReadyDfr done:^(id obj) {
-        [weakSelf.wampSocket unsubscribeTopic:@"http://spkvexample.com/pups/"];
+        [weakSelf.wampSocket unsubscribeTopic:[NSString stringWithFormat:@"http://spkvexample.com/%@/", _topic]];
     }];
 }
 
-- (void)mergePuppies:(NSDictionary*)results
+- (void)mergeObjects:(NSDictionary*)results
 {
-    NSArray* pupsToRemove = nil;
+    NSArray* objsToRemove = nil;
     BOOL forceSortingUpdate = NO;
-    NSMutableDictionary* pups = [self updatePuppies:results
-                                       pupsToRemove:&pupsToRemove
+    NSMutableDictionary* objs = [self updateObjects:results
+                                       objsToRemove:&objsToRemove
                                    outUpdateSorting:&forceSortingUpdate];
     
-    if ([pups count]) {
-        [self insertPups:pups];
+    if ([objs count]) {
+        [self insertObjects:objs];
     }
     
-    if ([pupsToRemove count]) {
-        [self removePups:pupsToRemove];
+    if ([objsToRemove count]) {
+        [self removeObjects:objsToRemove];
     }
     
-    if (forceSortingUpdate && ![pups count] && ![pupsToRemove count]) {
-        [self updatePupSorting];
+    if (forceSortingUpdate && ![objs count] && ![objsToRemove count]) {
+        [self updateObjectSorting];
     }
 }
 
-- (void)updatePupSorting
+- (void)updateObjectSorting
 {
     // lazy impl
-    [self willChangeValueForKey:@"puppies"];
-    _sortedPuppies = nil;
-    [self generateSortedPuppiesIfNil];
-    [self didChangeValueForKey:@"puppies"];
+    [self willChangeValueForKey:@"objects"];
+    _sortedObjects = nil;
+    [self generateSortedObjectsIfNil];
+    [self didChangeValueForKey:@"objects"];
 }
 
-- (void)removePups:(NSArray*)pupGIDs
+- (void)removeObjects:(NSArray*)gids
 {    
     NSMutableIndexSet* deletedIndexes = [[NSMutableIndexSet alloc] init];
     
-    [[_sortedPuppies valueForKey:@"gid"] enumerateObjectsUsingBlock:^(NSString* gid, NSUInteger idx, BOOL *stop) {
-        if ([pupGIDs containsObject:gid]) {
+    [[_sortedObjects valueForKey:@"gid"] enumerateObjectsUsingBlock:^(NSString* gid, NSUInteger idx, BOOL *stop) {
+        if ([gids containsObject:gid]) {
             [deletedIndexes addIndex:idx];
-            if ([pupGIDs count] == [deletedIndexes count]) {
+            if ([gids count] == [deletedIndexes count]) {
                 *stop = YES;
             }
         }
     }];
     
-    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:deletedIndexes forKey:@"puppies"];
-    [_puppyMap removeObjectsForKeys:pupGIDs];
-    _sortedPuppies = nil;
-    [self generateSortedPuppiesIfNil];
-    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:deletedIndexes forKey:@"puppies"];
+    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:deletedIndexes forKey:@"objects"];
+    [_objectMap removeObjectsForKeys:gids];
+    _sortedObjects = nil;
+    [self generateSortedObjectsIfNil];
+    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:deletedIndexes forKey:@"objects"];
 }
 
-- (void)insertPups:(NSDictionary*)pups
+- (void)insertObjects:(NSDictionary*)objects
 {
-    [_puppyMap addEntriesFromDictionary:pups];
+    [_objectMap addEntriesFromDictionary:objects];
     
     NSMutableIndexSet* insertedIndexes = [[NSMutableIndexSet alloc] init];
     
-    NSArray* updatedSortedPups = [[_puppyMap allValues] sortedArrayUsingDescriptors:@[_sortDescriptor]];
-    [updatedSortedPups enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([[pups allValues] containsObject:obj]) {
+    NSArray* updatedSortedObjs = [[_objectMap allValues] sortedArrayUsingDescriptors:@[_sortDescriptor]];
+    [updatedSortedObjs enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([[objects allValues] containsObject:obj]) {
             [insertedIndexes addIndex:idx];
             
-            if ([insertedIndexes count] == [pups count]) {
+            if ([insertedIndexes count] == [objects count]) {
                 *stop =YES;
             }
         }
     }];    
     
-    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:insertedIndexes forKey:@"puppies"];
-    _sortedPuppies = updatedSortedPups;
-    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:insertedIndexes forKey:@"puppies"];
+    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:insertedIndexes forKey:@"objects"];
+    _sortedObjects = updatedSortedObjs;
+    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:insertedIndexes forKey:@"objects"];
 }
 
 #pragma mark - Accessors
@@ -268,42 +271,42 @@
 {
     if (![sortDescriptor isEqual:_sortDescriptor]) {
         _sortDescriptor = sortDescriptor;
-        _sortedPuppies = nil;
-        [self generateSortedPuppiesIfNil];
+        _sortedObjects = nil;
+        [self generateSortedObjectsIfNil];
     }
 }
 
 #pragma mark - Sorted Array KVC
 
-- (void)generateSortedPuppiesIfNil
+- (void)generateSortedObjectsIfNil
 {
-    if (!_sortedPuppies) {
-        _sortedPuppies = [[_puppyMap allValues] sortedArrayUsingDescriptors:@[_sortDescriptor]];
+    if (!_sortedObjects) {
+        _sortedObjects = [[_objectMap allValues] sortedArrayUsingDescriptors:@[_sortDescriptor]];
     }
 }
 
-- (NSUInteger)countOfPuppies
+- (NSUInteger)countOfObjects
 {
-    return [_puppyMap count];
+    return [_objectMap count];
 }
 
-- (void)insertObject:(SPPuppy *)aPup inPuppiesAtIndex:(int)index
+- (void)insertObject:(SPKVODemoObject *)aObj inObjectsAtIndex:(int)index
 {
     // index is ignored, since we're sorting automatically
-    if (_sortedPuppies && [_sortedPuppies containsObject:aPup]) {
+    if (_sortedObjects && [_sortedObjects containsObject:aObj]) {
         return;
     }
     
-    if (!_sortedPuppies) {
-        _puppyMap[aPup.gid] = aPup;
-        [self generateSortedPuppiesIfNil];
+    if (!_sortedObjects) {
+        _objectMap[aObj.gid] = aObj;
+        [self generateSortedObjectsIfNil];
         return;
     }
     
-    // insert puppy at appropriate index
+    // insert object at appropriate index
     __block int insertionIndex = 0;
-    [_sortedPuppies enumerateObjectsUsingBlock:^(SPPuppy* pup, NSUInteger idx, BOOL *stop) {
-        switch ([[aPup valueForKeyPath:_sortDescriptor.key] compare:[pup valueForKeyPath:_sortDescriptor.key]]) {
+    [_sortedObjects enumerateObjectsUsingBlock:^(SPKVODemoObject* obj, NSUInteger idx, BOOL *stop) {
+        switch ([[aObj valueForKeyPath:_sortDescriptor.key] compare:[obj valueForKeyPath:_sortDescriptor.key]]) {
             case NSOrderedAscending:
                 if (!_sortDescriptor.ascending) {
                     insertionIndex = idx++;
@@ -327,43 +330,43 @@
     }];
     
     if (insertionIndex == 0) {
-        _sortedPuppies = [@[aPup] arrayByAddingObjectsFromArray:_sortedPuppies];
-    } else if (insertionIndex == [_sortedPuppies count]) {
-        _sortedPuppies = [_sortedPuppies arrayByAddingObject:aPup];
+        _sortedObjects = [@[aObj] arrayByAddingObjectsFromArray:_sortedObjects];
+    } else if (insertionIndex == [_sortedObjects count]) {
+        _sortedObjects = [_sortedObjects arrayByAddingObject:aObj];
     } else {
-        NSArray* beforeInsertion = [_sortedPuppies subarrayWithRange:NSMakeRange(0, insertionIndex--)];
-        NSArray* afterInsertion = [_sortedPuppies subarrayWithRange:NSMakeRange(insertionIndex, [_sortedPuppies count] - insertionIndex)];
-        _sortedPuppies = [[beforeInsertion arrayByAddingObject:aPup] arrayByAddingObjectsFromArray:afterInsertion];
+        NSArray* beforeInsertion = [_sortedObjects subarrayWithRange:NSMakeRange(0, insertionIndex--)];
+        NSArray* afterInsertion = [_sortedObjects subarrayWithRange:NSMakeRange(insertionIndex, [_sortedObjects count] - insertionIndex)];
+        _sortedObjects = [[beforeInsertion arrayByAddingObject:aObj] arrayByAddingObjectsFromArray:afterInsertion];
     }
 }
 
-- (id)objectInPuppiesAtIndex:(NSUInteger)index
+- (id)objectInObjectsAtIndex:(NSUInteger)index
 {
-    [self generateSortedPuppiesIfNil];
-    return _sortedPuppies[index];
+    [self generateSortedObjectsIfNil];
+    return _sortedObjects[index];
 }
 
-- (void)removeObjectFromPuppiesAtIndex:(NSUInteger)index
+- (void)removeObjectFromObjectsAtIndex:(NSUInteger)index
 {
-    [self generateSortedPuppiesIfNil];
-    SPPuppy* outgoingPup = _sortedPuppies[index];
-    [_puppyMap removeObjectForKey:outgoingPup.gid];
-    [self generateSortedPuppiesIfNil];
+    [self generateSortedObjectsIfNil];
+    SPKVODemoObject* outgoingObj = _sortedObjects[index];
+    [_objectMap removeObjectForKey:outgoingObj.gid];
+    [self generateSortedObjectsIfNil];
 }
 
-- (NSArray*)puppiesAtIndexes:(NSIndexSet *)indexes
+- (NSArray*)objectsAtIndexes:(NSIndexSet *)indexes
 {
-    [self generateSortedPuppiesIfNil];
-    return [_sortedPuppies objectsAtIndexes:indexes];
+    [self generateSortedObjectsIfNil];
+    return [_sortedObjects objectsAtIndexes:indexes];
 }
 
-- (void)removePuppiesAtIndexes:(NSIndexSet *)indexes
+- (void)removeObjectsAtIndexes:(NSIndexSet *)indexes
 {
-    [self generateSortedPuppiesIfNil];
-    [[_sortedPuppies objectsAtIndexes:indexes] sp_each:^(SPPuppy* pup) {
-        [_puppyMap removeObjectForKey:pup.gid];
+    [self generateSortedObjectsIfNil];
+    [[_sortedObjects objectsAtIndexes:indexes] sp_each:^(SPKVODemoObject* obj) {
+        [_objectMap removeObjectForKey:obj.gid];
     }];
-    [self generateSortedPuppiesIfNil];
+    [self generateSortedObjectsIfNil];
 }
 
 #pragma mark - MDWampProtocols
@@ -372,7 +375,7 @@
 {
     static NSDictionary* prefixesURIMap = nil;
     if (!prefixesURIMap){
-        prefixesURIMap = @{@"pups": @"http://spkvexample.com/pups"};
+        prefixesURIMap = @{_topic: [NSString stringWithFormat:@"http://spkvexample.com/%@", _topic]};
     }
     
     [prefixesURIMap enumerateKeysAndObjectsUsingBlock:^(NSString* prefix, NSString* uri, BOOL *stop) {
@@ -417,8 +420,8 @@
 {
     NSLog(@"Got object %@ for event %@", object, topicUri);
     
-    if ([topicUri hasSuffix:@"pups/"]) {
-        [self mergePuppies:object];
+    if ([topicUri hasSuffix:[NSString stringWithFormat:@"%@/", _topic]]) {
+        [self mergeObjects:object];
     }
 }
 
