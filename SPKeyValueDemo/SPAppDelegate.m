@@ -7,8 +7,9 @@
 //
 
 #import "SPAppDelegate.h"
-#import "SPKVODemoTableViewController.h"
+#import "SPDependsDemoTableVC.h"
 #import "SPKVODemoStorage.h"
+#import "SPKVODemoTableViewController.h"
 #import "SPPromise.h"
 
 @interface SPAppDelegate ()
@@ -26,9 +27,13 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
+#if 1
+    self.viewController = [[SPDependsDemoTableVC alloc] initWithStyle:UITableViewStylePlain];
+    [(SPDependsDemoTableVC*)self.viewController setStorage:_storage];
+#else
     self.viewController = [[SPKVODemoTableViewController alloc] initWithStyle:UITableViewStylePlain];
-    
-    [self.viewController setStorage:_storage];
+    [(SPKVODemoTableViewController*)self.viewController setStorage:_storage];
+#endif
     
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];

@@ -8,12 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@class SPKVODemoTableViewController;
-
 @interface SPAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (strong, nonatomic) SPKVODemoTableViewController *viewController;
+@property (strong, nonatomic) UITableViewController *viewController;
 
 @end

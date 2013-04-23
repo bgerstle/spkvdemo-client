@@ -6,21 +6,18 @@
 //  Copyright (c) 2013 Spotify. All rights reserved.
 //
 
-#import "SPKVODemoTableViewController.h"
+#import "SPDependsDemoTableVC.h"
 #import "SPFunctional.h"
 #import "SPLowVerbosity.h"
 #import "SPDepends.h"
 
-@interface SPKVODemoTableViewController ()
+@interface SPDependsDemoTableVC ()
 @property (nonatomic, strong) UIView* maskView;
 @end
 
 #define kCellBindingFormat @"%d.%@"
-static void* kObjectsCollectionKVOC = &kObjectsCollectionKVOC;
-static void* kStorageOnlineKVOC = &kStorageOnlineKVOC;
-static void* kObjCellViewKVOC = &kObjCellViewKVOC;
 
-@implementation SPKVODemoTableViewController
+@implementation SPDependsDemoTableVC
 
 - (void)setStorage:(SPKVODemoStorage *)storage
 {
@@ -30,64 +27,19 @@ static void* kObjCellViewKVOC = &kObjCellViewKVOC;
     }
 }
 
-- (void)unbindPup:(SPKVODemoObject*)pup
-{
-    @try {
-        [pup removeObserver:self forKeyPath:@"name" context:kObjCellViewKVOC];
-        [pup removeObserver:self forKeyPath:@"about" context:kObjCellViewKVOC];
-        [pup removeObserver:self forKeyPath:@"favorite" context:kObjCellViewKVOC];
-    }
-    @catch (NSException *exception) { NSLog(@"OH EM GEE"); }
-}
-
-- (void)bindPup:(SPKVODemoObject*)pup
-{
-    [pup addObserver:self forKeyPath:@"name" options:0 context:kObjCellViewKVOC];
-    [pup addObserver:self forKeyPath:@"about" options:0 context:kObjCellViewKVOC];
-    [pup addObserver:self forKeyPath:@"favorite" options:0 context:kObjCellViewKVOC];
-}
-
 - (void)maybeAddStorageDependencies
 {
     if (!_storage || ![self isViewLoaded]) {
         return;
     }
     
-    @try {
-        [_storage removeObserver:self forKeyPath:@"objects"];
-        [_storage removeObserver:self forKeyPath:@"online"];
-    }
-    @catch (NSException *exception) { NSLog(@"OH EM GEE"); }
-
-
-    [_storage addObserver:self
-               forKeyPath:@"objects"
-                  options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionPrior
-                  context:kObjectsCollectionKVOC];
+    [self sp_removeDependency:@"objects"];
+    [self sp_removeDependency:@"remoteOnline"];
     
-    [_storage addObserver:self
-               forKeyPath:@"online"
-                  options:NSKeyValueObservingOptionInitial
-                  context:kStorageOnlineKVOC];
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if (context == kObjectsCollectionKVOC) {
+    $sp_decl_wself;
+    SPAddDependencyV(self,@"objects", _storage, @"objects", ^ (NSDictionary* change, id obj, NSString* keypath){
         NSLog(@"Updating table w/ change: %@", change);
-        
-        if ([change[NSKeyValueChangeNotificationIsPriorKey] boolValue]) {            
-            if ([change[NSKeyValueChangeKindKey] intValue] == NSKeyValueChangeRemoval) {
-                [change[NSKeyValueChangeIndexesKey] enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
-                    SPKVODemoObject* pupToBeRemoved = [_storage mutableArrayValueForKey:@"objects"][idx];
-                    [self unbindPup:pupToBeRemoved];
-                }];
-            }
-            
-            return;
-        }
-        
-        [self.tableView beginUpdates];
+        [weakSelf.tableView beginUpdates];
         
         NSIndexSet* indexes = change[NSKeyValueChangeIndexesKey];
         NSMutableArray* indexPaths = [[NSMutableArray alloc] initWithCapacity:[indexes count]];
@@ -96,53 +48,39 @@ static void* kObjCellViewKVOC = &kObjCellViewKVOC;
         }];
         switch ([change[NSKeyValueChangeKindKey] intValue]) {
             case NSKeyValueChangeRemoval:
-                [self.tableView deleteRowsAtIndexPaths:indexPaths
+                [weakSelf.tableView deleteRowsAtIndexPaths:indexPaths
                                           withRowAnimation:UITableViewRowAnimationAutomatic];
                 break;
             case NSKeyValueChangeInsertion:
-                [self.tableView insertRowsAtIndexPaths:indexPaths
+                [weakSelf.tableView insertRowsAtIndexPaths:indexPaths
                                           withRowAnimation:UITableViewRowAnimationAutomatic];
                 break;
             default:
-                [self.tableView reloadData];
+                [weakSelf.tableView reloadData];
                 break;
         }
         
-        [self.tableView endUpdates];
-    } else if (context == kStorageOnlineKVOC) {
-        if ([self.storage isOnline]) {
-            [self.storage getRemoteObjects];
-            [self.storage subscribeToAllObjects];
-            [self.maskView removeFromSuperview];
+        [weakSelf.tableView endUpdates];
+    }, nil);
+    
+    SPAddDependencyV(self, @"remoteOnline", _storage, @"online", ^ (NSDictionary* change, id obj, NSString* keypath) {
+        if ([weakSelf.storage isOnline]) {
+            [weakSelf.storage getRemoteObjects];
+            [weakSelf.storage subscribeToAllObjects];
+            [weakSelf.maskView removeFromSuperview];
         } else {
-            if(self.maskView.superview) {
+            if(weakSelf.maskView.superview) {
                 return;
-            } else if (!self.maskView) {
-                self.maskView = [[UIView alloc] initWithFrame:self.view.bounds];
-                self.maskView.backgroundColor = [UIColor blackColor];
-                self.maskView.alpha = 0.7;
-                self.maskView.userInteractionEnabled = NO;
+            } else if (!weakSelf.maskView) {
+                weakSelf.maskView = [[UIView alloc] initWithFrame:weakSelf.view.bounds];
+                weakSelf.maskView.backgroundColor = [UIColor blackColor];
+                weakSelf.maskView.alpha = 0.7;
+                weakSelf.maskView.userInteractionEnabled = NO;
             }
-            
-            [self.view addSubview:_maskView];
+        
+            [weakSelf.view addSubview:_maskView];
         }
-    } else if (context == kObjCellViewKVOC) {
-        SPKVODemoObject* pup = (SPKVODemoObject*)object;
-        int index = [[_storage mutableArrayValueForKey:@"objects"] indexOfObject:pup];
-        UITableViewCell* cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
-        if (!cell) {
-            return;
-        }
-        if ([keyPath isEqualToString:@"name"]) {
-            cell.textLabel.text = pup.name;
-        } else if ([keyPath isEqualToString:@"about"]) {
-            cell.detailTextLabel.text = pup.about;
-        } else /*if ([keyPath isEqualToString:@"favorite"])*/ {
-            cell.accessoryType = pup.isFavorite ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-        }
-    } else {
-        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-    }
+    }, nil);
 }
 
 #pragma mark - UITableViewController Stuff
@@ -196,14 +134,26 @@ static void* kObjCellViewKVOC = &kObjCellViewKVOC;
         cell.textLabel.textColor = [UIColor blackColor];
     }
     
-    SPKVODemoObject* pup = [_storage mutableArrayValueForKey:@"objects"][indexPath.row];
+    SPKVODemoObject* obj = [_storage mutableArrayValueForKey:@"objects"][indexPath.row];
     
     // Configure the cell...
-    [self bindPup:pup];
-    
-    cell.textLabel.text = pup.name;
-    cell.detailTextLabel.text = pup.about;
-    cell.accessoryType = pup.isFavorite ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-variable"
+    // hiding warning for unused weak self (selff) var declared by $depends
+    $depends($sprintf(kCellBindingFormat, indexPath.row, @"name"), obj, @"name",
+             ^ (NSDictionary* change, SPKVODemoObject* aObj, NSString* keypath) {
+                 cell.textLabel.text = [NSString stringWithFormat:@"%@ {%@}", obj.name, obj.gid];
+                 [cell.textLabel sizeToFit];
+             }, nil);
+    $depends($sprintf(kCellBindingFormat, indexPath.row, @"about"), obj, @"about",
+             ^ (NSDictionary* change, SPKVODemoObject* aObj, NSString* keypath) {
+                 cell.detailTextLabel.text = obj.about;
+             }, nil);
+    $depends($sprintf(kCellBindingFormat, indexPath.row, @"favorite"), obj, @"favorite",
+             ^ (NSDictionary* change, SPKVODemoObject* aObj, NSString* keypath) {
+                 cell.accessoryType = obj.isFavorite ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+             }, nil);
+#pragma clang diagnostic pop
     
     return cell;
 }
@@ -249,12 +199,9 @@ static void* kObjCellViewKVOC = &kObjCellViewKVOC;
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row >= [[_storage valueForKeyPath:@"objects.@count"] intValue]) {
-        return;
-    }
-    
-    SPKVODemoObject* pup = [_storage mutableArrayValueForKey:@"objects"][indexPath.row];
-    [self unbindPup:pup];
+    [self sp_removeDependency:$sprintf(kCellBindingFormat, indexPath.row, @"name")];
+    [self sp_removeDependency:$sprintf(kCellBindingFormat, indexPath.row, @"about")];
+    [self sp_removeDependency:$sprintf(kCellBindingFormat, indexPath.row, @"favorite")];
 }
 
 #pragma mark - Table view delegate

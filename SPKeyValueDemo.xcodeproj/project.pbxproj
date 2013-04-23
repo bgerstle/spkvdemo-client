@@ -32,7 +32,7 @@
 		BC934C801712F89000835B9B /* SPLifetimeGlue.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934C6F1712F89000835B9B /* SPLifetimeGlue.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BC934C811712F89000835B9B /* SPLowVerbosity.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934C711712F89000835B9B /* SPLowVerbosity.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BC934C821712F89000835B9B /* SPLowVerbosity.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934C711712F89000835B9B /* SPLowVerbosity.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		BC934CA11713281000835B9B /* SPKVODemoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CA01713281000835B9B /* SPKVODemoTableViewController.m */; };
+		BC934CA11713281000835B9B /* SPDependsDemoTableVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CA01713281000835B9B /* SPDependsDemoTableVC.m */; };
 		BC934CA71713295E00835B9B /* MDWamp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC934CA61713295E00835B9B /* MDWamp.framework */; };
 		BC934CA91713296E00835B9B /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC934CA81713296E00835B9B /* CFNetwork.framework */; };
 		BC934CAB1713297300835B9B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC934CAA1713297300835B9B /* Security.framework */; };
@@ -45,6 +45,7 @@
 		BC934CC61713545800835B9B /* SPKVODemoStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CC51713545800835B9B /* SPKVODemoStorage.m */; };
 		BC934CC917136D1800835B9B /* NSCollection+Map.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CC817136D1800835B9B /* NSCollection+Map.m */; };
 		BC934CCA17136D1800835B9B /* NSCollection+Map.m in Sources */ = {isa = PBXBuildFile; fileRef = BC934CC817136D1800835B9B /* NSCollection+Map.m */; };
+		BC94BB1117271623008EE7BE /* SPKVODemoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC94BB1017271623008EE7BE /* SPKVODemoTableViewController.m */; };
 		BCD1EA5F1726EA4000EB40B1 /* SPDemoScratchPadTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD1EA5E1726EA4000EB40B1 /* SPDemoScratchPadTests.m */; };
 		BCD1EA621726EAB300EB40B1 /* SPDemoScratchPad.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD1EA611726EAB300EB40B1 /* SPDemoScratchPad.m */; };
 /* End PBXBuildFile section */
@@ -90,8 +91,8 @@
 		BC934C701712F89000835B9B /* SPLowVerbosity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPLowVerbosity.h; sourceTree = "<group>"; };
 		BC934C711712F89000835B9B /* SPLowVerbosity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPLowVerbosity.m; sourceTree = "<group>"; };
 		BC934C741712F89000835B9B /* SPSuccinct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPSuccinct.h; sourceTree = "<group>"; };
-		BC934C9F1713281000835B9B /* SPKVODemoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPKVODemoTableViewController.h; sourceTree = "<group>"; };
-		BC934CA01713281000835B9B /* SPKVODemoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPKVODemoTableViewController.m; sourceTree = "<group>"; };
+		BC934C9F1713281000835B9B /* SPDependsDemoTableVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPDependsDemoTableVC.h; sourceTree = "<group>"; };
+		BC934CA01713281000835B9B /* SPDependsDemoTableVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPDependsDemoTableVC.m; sourceTree = "<group>"; };
 		BC934CA61713295E00835B9B /* MDWamp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MDWamp.framework; path = "../../Library/Developer/Xcode/DerivedData/MDWamp-esezqfvrvkrxtybbmfcmgidegugs/Build/Products/Debug-iphoneos/MDWamp.framework"; sourceTree = "<group>"; };
 		BC934CA81713296E00835B9B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		BC934CAA1713297300835B9B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -113,6 +114,8 @@
 		BC934CC51713545800835B9B /* SPKVODemoStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPKVODemoStorage.m; sourceTree = "<group>"; };
 		BC934CC717136D1800835B9B /* NSCollection+Map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSCollection+Map.h"; sourceTree = "<group>"; };
 		BC934CC817136D1800835B9B /* NSCollection+Map.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSCollection+Map.m"; sourceTree = "<group>"; };
+		BC94BB0F17271623008EE7BE /* SPKVODemoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPKVODemoTableViewController.h; sourceTree = "<group>"; };
+		BC94BB1017271623008EE7BE /* SPKVODemoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPKVODemoTableViewController.m; sourceTree = "<group>"; };
 		BCD1EA5D1726EA4000EB40B1 /* SPDemoScratchPadTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPDemoScratchPadTests.h; sourceTree = "<group>"; };
 		BCD1EA5E1726EA4000EB40B1 /* SPDemoScratchPadTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPDemoScratchPadTests.m; sourceTree = "<group>"; };
 		BCD1EA601726EAB300EB40B1 /* SPDemoScratchPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPDemoScratchPad.h; sourceTree = "<group>"; };
@@ -257,8 +260,10 @@
 		BC934CAE17132A6000835B9B /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				BC934C9F1713281000835B9B /* SPKVODemoTableViewController.h */,
-				BC934CA01713281000835B9B /* SPKVODemoTableViewController.m */,
+				BC94BB0F17271623008EE7BE /* SPKVODemoTableViewController.h */,
+				BC94BB1017271623008EE7BE /* SPKVODemoTableViewController.m */,
+				BC934C9F1713281000835B9B /* SPDependsDemoTableVC.h */,
+				BC934CA01713281000835B9B /* SPDependsDemoTableVC.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -417,7 +422,7 @@
 				BC934C7D1712F89000835B9B /* SPKVONotificationCenter.m in Sources */,
 				BC934C7F1712F89000835B9B /* SPLifetimeGlue.m in Sources */,
 				BC934C811712F89000835B9B /* SPLowVerbosity.m in Sources */,
-				BC934CA11713281000835B9B /* SPKVODemoTableViewController.m in Sources */,
+				BC934CA11713281000835B9B /* SPDependsDemoTableVC.m in Sources */,
 				BC934CB217132A7500835B9B /* SPKVODemoObject.m in Sources */,
 				BC934CBF1713419200835B9B /* SPDeferred.m in Sources */,
 				BC934CC01713419200835B9B /* SPDeferredCallback.m in Sources */,
@@ -425,6 +430,7 @@
 				BC934CC21713419200835B9B /* SPPromise.m in Sources */,
 				BC934CC61713545800835B9B /* SPKVODemoStorage.m in Sources */,
 				BC934CC917136D1800835B9B /* NSCollection+Map.m in Sources */,
+				BC94BB1117271623008EE7BE /* SPKVODemoTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
