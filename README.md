@@ -5,6 +5,6 @@ This is an application serves as a client for a WAMP server which is a simple ke
 
 For the demo server code, clone btgerst/spkvdemo-server. I suggest simply running the myserver.py script and running the iOS client in the simulator.
 
-There are two branches which illustrate a conventional KVO approach (oldschool) and Spotify's approach to KVO using SPDepends (master). 
+To toggle between conventional and Spotify approaches to KVO, change the #if conditional in SPAppDelegate.m -didFinishLaunching method.
 
 Contact the author at brian.gerstle@gmail.com
