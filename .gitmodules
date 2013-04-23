@@ -4,3 +4,6 @@
 [submodule "SocketRocket"]
 	path = SocketRocket
 	url = https://github.com/square/SocketRocket.git
+[submodule "spdeferred"]
+	path = spdeferred
+	url = https://github.com/btgerst/spdeferred.git
