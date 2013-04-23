@@ -164,6 +164,8 @@
 
 - (void)subscribeToAllObjects
 {
+    [self unsubscribeFromAllObjects];
+    
     $sp_decl_wself;
     [_socketReadyDfr done:^(id obj) {
         [weakSelf.wampSocket subscribeTopic:[NSString stringWithFormat:@"http://spkvexample.com/%@/", _topic]
