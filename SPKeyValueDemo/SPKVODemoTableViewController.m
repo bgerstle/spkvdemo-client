@@ -139,10 +139,11 @@
     // Configure the cell...
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-variable"
-    // hiding warnig for unused weak self (selff) var declared by $depends
+    // hiding warning for unused weak self (selff) var declared by $depends
     $depends($sprintf(kCellBindingFormat, indexPath.row, @"name"), obj, @"name",
              ^ (NSDictionary* change, SPKVODemoObject* aObj, NSString* keypath) {
-                 cell.textLabel.text = obj.name;
+                 cell.textLabel.text = [NSString stringWithFormat:@"%@ {%@}", obj.name, obj.gid];
+                 [cell.textLabel sizeToFit];
              }, nil);
     $depends($sprintf(kCellBindingFormat, indexPath.row, @"about"), obj, @"about",
              ^ (NSDictionary* change, SPKVODemoObject* aObj, NSString* keypath) {
